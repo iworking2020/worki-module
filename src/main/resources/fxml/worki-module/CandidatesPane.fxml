@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane fx:id="parentPane" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.iworking.personnel.reserve.worki.module.controller.CandidatesPaneController">
+    <center>
+        <SplitPane dividerPositions="0.7" styleClass="grey" BorderPane.alignment="CENTER">
+            <items>
+                <Pagination fx:id="candidatePagination" styleClass="grey" BorderPane.alignment="CENTER">
+                    <BorderPane.margin>
+                        <Insets bottom="10.0" />
+                    </BorderPane.margin>
+               <padding>
+                  <Insets bottom="10.0" />
+               </padding>
+                </Pagination>
+                <VBox fx:id="searchPane" maxWidth="300.0" minWidth="200.0" prefWidth="250.0" spacing="5.0" style="-fx-border-width: 0 0 0 1px; -fx-border-color: rgba(0, 0, 0, 0.20);">
+                    <children>
+                        <TextField fx:id="keyWordTextField" maxWidth="1.7976931348623157E308" promptText="ключевое слово" />
+                  <TextField fx:id="addressTextField" promptText="введите город, район, село" />
+                  <HBox>
+                     <children>
+                        <Label text="дистанция поиска" />
+                         <StackPane HBox.hgrow="ALWAYS" />
+                        <Label fx:id="numberKmLabel" text="1 км." />
+                     </children>
+                  </HBox>
+                  <Slider fx:id="distanceSlider" majorTickUnit="100.0" max="1000.0" min="1.0" minorTickCount="1" showTickMarks="true" styleClass="grey" value="1.0" />
+                        <HBox>
+                            <children>
+                                <Label text="опыт работы" />
+                                <StackPane HBox.hgrow="ALWAYS" />
+                                <Label fx:id="numberExpLabel" text="не важен" />
+                            </children>
+                        </HBox>
+                  <Slider fx:id="experienceSlider" majorTickUnit="10.0" max="60.0" minorTickCount="2" showTickLabels="true" showTickMarks="true" styleClass="grey" />
+                  <ComboBox fx:id="genderComboBox" maxWidth="1.7976931348623157E308" promptText="пол" />
+                  <HBox spacing="5.0">
+                     <children>
+                        <TextField fx:id="minAgeTextField" promptText="мин. возраст" />
+                        <TextField fx:id="maxAgeTextField" promptText="макс. возраст" />
+                     </children>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </HBox>
+                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#actionSearchParams" styleClass="grey" text="поиск" />
+                    </children>
+                    <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                    </padding>
+                </VBox>
+            </items>
+        </SplitPane>
+    </center>
+   <bottom>
+       <StackPane BorderPane.alignment="CENTER">
+           <children>
+               <fx:include fx:id="candidateView" source="CandidateView.fxml" />
+           </children>
+       </StackPane>
+   </bottom>
+</BorderPane>

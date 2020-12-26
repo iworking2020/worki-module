@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<fx:root type="HBox" fx:id="parentPane" alignment="CENTER_LEFT" fillHeight="false" maxHeight="80.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+      <StackPane fx:id="wrapperImage" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="60.0" style="-fx-background-color: white;">
+         <children>
+              <ImageView fx:id="imageView" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" />
+         </children>
+         <HBox.margin>
+            <Insets right="10.0" />
+         </HBox.margin>
+      </StackPane>
+          <VBox>
+              <children>
+                  <Label fx:id="fioLabel" text="Иванов А.В." />
+                  <Label fx:id="professionLabel" text="Профессия" />
+              </children>
+          </VBox>
+    </children>
+</fx:root>
