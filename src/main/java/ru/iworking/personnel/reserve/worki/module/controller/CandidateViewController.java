@@ -34,7 +34,7 @@ public class CandidateViewController implements Initializable {
 
     private static final Boolean IS_BACKGROUND_LOADING = true;
     private static final String DEFAULT_IMAGE_URL = "https://hb.bizmrg.com/worki-production/static/closed_contact_165x165.png";
-    private static final String URL_CANDIDATE_PAGE_TEMPLATE = "https://hr.worki.ru/candidate/%s/search";
+    private static final String URL_CANDIDATE_PAGE_TEMPLATE = "https://hr.vkrabota.ru/candidate/%s/search";
 
     private final HostServices hostServices;
 
@@ -135,7 +135,7 @@ public class CandidateViewController implements Initializable {
         String profession = Objects.nonNull(experience.getProfession()) ?
                 experience.getProfession().getTitle() :
                 "профессия не указана";
-        String firstLine = String.format("(%s %s) %s", experience.getDuration(), TextUtil.nameForMonths(experience.getDuration()), profession);
+        String firstLine = String.format("(%s) %s", experience.getPeriod(), profession);
         pane.getChildren().add(new Label(firstLine));
         pane.getChildren().add(new Label(experience.getTitle()));
         Label descLabel = new Label(experience.getDescription());

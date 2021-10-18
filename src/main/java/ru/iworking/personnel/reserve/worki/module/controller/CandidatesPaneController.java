@@ -16,6 +16,7 @@ import ru.iworking.personnel.reserve.ApplicationPropertiesProvider;
 import ru.iworking.personnel.reserve.utils.TextUtil;
 import ru.iworking.personnel.reserve.worki.module.component.list.view.cell.WorkiCandidateCell;
 import ru.iworking.personnel.reserve.worki.module.component.list.view.factory.WorkiCandidateCellControllerFactory;
+import ru.iworking.personnel.reserve.worki.module.config.WorkiModuleConfiguration;
 import ru.iworking.personnel.reserve.worki.module.converter.AgeFormatter;
 import ru.iworking.personnel.reserve.worki.module.converter.GenderCellFactory;
 import ru.iworking.personnel.reserve.worki.module.dto.CandidateDto;
@@ -32,7 +33,6 @@ import java.util.ResourceBundle;
 @RequiredArgsConstructor
 public class CandidatesPaneController implements Initializable {
 
-    private static final Integer NUMBER_ELEMENTS_IN_PAGE = 50;
     private static final Integer NUMBER_PAGES_IN_INDICATOR = 10;
     private static final Integer START_INDEX_FOR_PAGINATION = 0;
 
@@ -46,6 +46,8 @@ public class CandidatesPaneController implements Initializable {
     private static final String TEMPLATE_EXPERIENCE_YEARS_TEXT_DEFAULT = "не важен";
 
     private final ApplicationPropertiesProvider applicationPropertiesProvider;
+
+    @Autowired @Lazy private WorkiModuleConfiguration configuration;
 
     @Autowired @Lazy private CandidateService candidateService;
     @Autowired @Lazy private WorkiCandidateCellControllerFactory candidateCellControllerFactory;
@@ -125,26 +127,33 @@ public class CandidatesPaneController implements Initializable {
 
     @FXML
     public void actionSearchParams(ActionEvent event) {
-        CandidateSearchParamsDto searchParams = createSearchParams();
+        CandidateSearchParamsDto searchParams = this.createSearchParams();
+        searchParams.setPage(START_INDEX_FOR_PAGINATION + 1);
+        searchParams.setSize(configuration.getDefaultPageSize());
+
         this.saveSearchParams(searchParams);
 
         CandidatePage startPage = candidateService.findByParams(searchParams);
         Long totalElements = startPage.getMeta().getTotal();
+        int pageCount = Objects.nonNull(totalElements) && totalElements.intValue() > 0 ?
+                this.getPageCount(totalElements.intValue(), configuration.getDefaultPageSize()) :
+                1;
 
         candidatePagination.setMaxPageIndicatorCount(NUMBER_PAGES_IN_INDICATOR);
-        candidatePagination.setPageCount(getPageCount(totalElements.intValue(), NUMBER_ELEMENTS_IN_PAGE));
+        candidatePagination.setPageCount(pageCount);
         candidatePagination.setCurrentPageIndex(START_INDEX_FOR_PAGINATION);
         candidatePagination.setPageFactory(this::createPage);
     }
 
     private CandidateSearchParamsDto createSearchParams() {
         CandidateSearchParamsDto searchParamsDto = new CandidateSearchParamsDto();
-        searchParamsDto.setPage(START_INDEX_FOR_PAGINATION + 1);
         if (!Strings.isNullOrEmpty(keyWordTextField.getText())) searchParamsDto.setKeyWord(keyWordTextField.getText());
         if (!Strings.isNullOrEmpty(addressTextField.getText())) {
             searchParamsDto.setAddress(addressTextField.getText());
             Double distanceValue = distanceSlider.getValue();
             searchParamsDto.setDistance(distanceValue.intValue());
+        } else {
+            searchParamsDto.setAddress(configuration.getDefaultSearchCity());
         }
         Double experienceYears = experienceSlider.getValue();
         if (experienceYears > 0) {
@@ -174,7 +183,7 @@ public class CandidatesPaneController implements Initializable {
         if (!Strings.isNullOrEmpty(searchAddress)) {
             addressTextField.setText(searchAddress);
             String searchAddressDistance = applicationPropertiesProvider.getValueByName(SYSTEM_NAME_PARAMETER_ADDRESS_DISTANCE);
-            if (!Strings.isNullOrEmpty(searchAddress)) distanceSlider.setValue(Double.parseDouble(searchAddressDistance));
+            if (!Strings.isNullOrEmpty(searchAddressDistance)) distanceSlider.setValue(Double.parseDouble(searchAddressDistance));
         }
 
         String searchExperienceMonths = applicationPropertiesProvider.getValueByName(SYSTEM_NAME_PARAMETER_EXPERIENCE_MONTHS);

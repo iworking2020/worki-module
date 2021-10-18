@@ -37,21 +37,7 @@ public class CandidateServiceImpl implements CandidateService {
 
     @Getter
     @Setter
-    private CandidateSearchParamsDto searchParams = CandidateSearchParamsDto.builder()
-            .page(1)
-            .keyWord("")
-            .build();
-
-    private final LoadingCache<CandidateSearchParamsDto, CandidatePage> pages = CacheBuilder.newBuilder()
-            .expireAfterWrite(1, TimeUnit.HOURS)
-            .build(
-                    new CacheLoader<CandidateSearchParamsDto, CandidatePage>() {
-                        @Override
-                        public CandidatePage load(CandidateSearchParamsDto searchParamsDto) {
-                            Map<String, Object> params = new ObjectMapper().convertValue(searchParamsDto, Map.class);
-                            return candidateClient.findAll(authService.getAuthHeader(), params);
-                        }
-                    });
+    private CandidateSearchParamsDto searchParams;
 
     @PostConstruct
     public void init() {
@@ -62,6 +48,11 @@ public class CandidateServiceImpl implements CandidateService {
                 .logger(new Slf4jLogger(CandidateClient.class))
                 .logLevel(Logger.Level.FULL)
                 .target(CandidateClient.class, configuration.getApiUrl());
+        searchParams = CandidateSearchParamsDto.builder()
+                .page(1)
+                .size(configuration.getDefaultPageSize())
+                .address(configuration.getDefaultSearchCity())
+                .build();
     }
 
     @Override
@@ -83,11 +74,8 @@ public class CandidateServiceImpl implements CandidateService {
         if (!searchParams.equals(params)) {
             this.searchParams = params;
         }
-        try {
-            return pages.get(params);
-        } catch (ExecutionException e) {
-            return null;
-        }
+        Map<String, Object> paramsMap = new ObjectMapper().convertValue(params, Map.class);
+        return candidateClient.findAll(authService.getAuthHeader(), paramsMap);
     }
 
 }

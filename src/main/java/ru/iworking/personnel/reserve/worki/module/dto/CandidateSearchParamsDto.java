@@ -17,6 +17,8 @@ import ru.iworking.personnel.reserve.worki.module.converter.GenderEnumSerializer
 public class CandidateSearchParamsDto {
     @JsonProperty("page")
     protected Integer page;
+    @JsonProperty("per_page")
+    protected Integer size;
     @JsonProperty("key_word")
     protected String keyWord;
     @JsonProperty("address")

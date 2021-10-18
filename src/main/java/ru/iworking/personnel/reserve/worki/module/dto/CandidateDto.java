@@ -22,7 +22,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CandidateDto {
-    protected Long id;
+    protected String id;
     @JsonProperty("first_name")
     protected String firstName;
     @JsonProperty("last_name")
@@ -32,6 +32,7 @@ public class CandidateDto {
     protected Long lat;
     @JsonProperty("long")
     protected Long longs;
+    protected Integer age;
     protected String address;
     protected String education;
     protected String languages;
@@ -80,14 +81,9 @@ public class CandidateDto {
     @JsonProperty("disability_group")
     protected Integer disabilityGroup;
     protected List<ProfessionDto> professions;
-    @JsonProperty("pref_professions")
+    @JsonProperty("preferred_professions")
     protected List<ProfessionDto> prefProfessions;
     protected NationalityDto nationality;
-
-    @JsonIgnore
-    public Integer getAge() {
-        return TimeUtil.calAge(this.birthday, LocalDate.now());
-    }
 
 }
 

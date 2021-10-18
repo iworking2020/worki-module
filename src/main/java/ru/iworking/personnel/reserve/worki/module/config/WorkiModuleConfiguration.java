@@ -25,6 +25,14 @@ public class WorkiModuleConfiguration {
     @Getter
     private String titleText;
 
+    @Value("${worki.default-page-size:5}")
+    @Getter
+    private Integer defaultPageSize;
+
+    @Value("${worki.default-search-city:Москва}")
+    @Getter
+    private String defaultSearchCity;
+
     private final ApplicationContextProvider applicationContextProvider;
     private final MainTabPaneProvider mainTabPaneProvider;
 

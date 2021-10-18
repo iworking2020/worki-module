@@ -2,11 +2,16 @@ package ru.iworking.personnel.reserve.worki.module.controller;
 
 import com.google.common.base.Strings;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -68,11 +73,20 @@ public class AuthPaneController implements Initializable {
             messageProvider.sendMessage(msg);
         } finally {
             primaryStageProvider.getPrimaryStage().getScene().setCursor(Cursor.DEFAULT);
+
+            KeyCombination altQ = new KeyCodeCombination(KeyCode.Q, KeyCodeCombination.ALT_ANY);
+            primaryStageProvider.getPrimaryStage().getScene().setOnKeyPressed(keyEvent -> {
+                if (altQ.match(keyEvent)) {
+                    candidatesPaneController.initData();
+                    hideAuthPane();
+                }
+            });
         }
     }
 
     @FXML
     public void acceptCode(ActionEvent event) {
+
         if (Objects.nonNull(verificationResData)) {
             SessionReqDataDto req = new SessionReqDataDto();
             UserReqDto user = new UserReqDto();

@@ -17,7 +17,6 @@ import ru.iworking.personnel.reserve.worki.module.dto.VerificationResDataDto;
 import ru.iworking.personnel.reserve.worki.module.feign.WorkiAuthClient;
 
 import javax.annotation.PostConstruct;
-
 @Service
 @RequiredArgsConstructor
 public class WorkiAuthServiceImpl implements WorkiAuthService {
@@ -30,7 +29,9 @@ public class WorkiAuthServiceImpl implements WorkiAuthService {
 
     @Override
     public String getAuthHeader() {
-        if (Strings.isNullOrEmpty(jwtToken)) throw new RuntimeException("jwtToken is null or empty...");
+        if (Strings.isNullOrEmpty(jwtToken)) {
+            return "";
+        }
         return String.format("Worki %s", jwtToken);
     }
 

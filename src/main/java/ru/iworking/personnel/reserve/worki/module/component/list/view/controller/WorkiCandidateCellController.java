@@ -24,11 +24,15 @@ public class WorkiCandidateCellController {
         this.candidate = candidate;
         String fio = String.format("%s %s", candidate.getLastName(), candidate.getFirstName());
         resumePane.getFioLabel().setText(fio);
-        String professions = candidate.getPrefProfessions().parallelStream()
-                .map(ProfessionDto::getTitle)
-                .collect(Collectors.joining(", "));
-        if (!Strings.isNullOrEmpty(professions)) {
-            resumePane.getProfessionLabel().setText(professions);
+        if (!candidate.getPrefProfessions().isEmpty()) {
+            String professions = candidate.getPrefProfessions().parallelStream()
+                    .map(ProfessionDto::getTitle)
+                    .collect(Collectors.joining(", "));
+            if (!Strings.isNullOrEmpty(professions)) {
+                resumePane.getProfessionLabel().setText(professions);
+            } else {
+                resumePane.getProfessionLabel().setText("не указана");
+            }
         } else {
             resumePane.getProfessionLabel().setText("не указана");
         }
